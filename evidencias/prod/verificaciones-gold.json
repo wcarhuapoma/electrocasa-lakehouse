@@ -1,0 +1,60 @@
+{
+  "ventas_netas": {
+    "aprobada": true,
+    "esperadas": 320,
+    "observadas": 320,
+    "diferencias": 0
+  },
+  "ranking_productos": {
+    "aprobada": true,
+    "esperadas": 20,
+    "observadas": 20,
+    "diferencias": 0
+  },
+  "dotacion_mensual": {
+    "aprobada": true,
+    "esperadas": 320,
+    "observadas": 320,
+    "diferencias": 0
+  },
+  "ventas_por_vendedor": {
+    "aprobada": true,
+    "esperadas": 5502,
+    "observadas": 5502,
+    "diferencias": 0
+  },
+  "resenas_negativas": {
+    "aprobada": true,
+    "esperadas": 40,
+    "observadas": 40,
+    "diferencias": 0
+  },
+  "resenas_aceptadas_por_clave": {
+    "aprobada": true
+  },
+  "claves_de_negocio_unicas": {
+    "aprobada": true
+  },
+  "despachos_por_courier": {
+    "aprobada": true,
+    "esperadas": 3,
+    "observadas": 3,
+    "diferencias": 0
+  },
+  "tracking_sin_eventos_reprocesados": {
+    "aprobada": true
+  },
+  "regresion_vigencias": {
+    "aprobada": true
+  },
+  "regresion_courier_cuarentena": {
+    "aprobada": true
+  },
+  "impacto_revision": {
+    "aprobada": true,
+    "empleados_activos_octubre": 1129,
+    "ventas_reasignadas": 81,
+    "resenas_recuperadas": 29
+  },
+  "run_url": "https://dbc-02d8efd4-96e8.cloud.databricks.com/?o=7474644067615801#job/516181352472792/run/889937115755930"
+}

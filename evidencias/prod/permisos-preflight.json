@@ -1,0 +1,20 @@
+{
+  "grupo": {
+    "sentencia": "GRANT USE CATALOG ON CATALOG electrocasa_prod TO electrocasa_ingenieria",
+    "id": "01f1e852-d307-1c06-96b1-9a0218e83def",
+    "estado": "FAILED",
+    "error": "[RequestId=ad760ecd-1239-43d5-a64a-ac521bc585f5 ErrorClass=PRINCIPAL_DOES_NOT_EXIST.PRINCIPAL_DOES_NOT_EXIST] Could not find principal with name electrocasa_ingenieria."
+  },
+  "sistema": {
+    "sentencia": "SHOW GRANTS ON CATALOG system",
+    "id": "01f1e852-d3fd-1a30-b588-10186a877f0a",
+    "estado": "SUCCEEDED",
+    "error": ""
+  },
+  "auditoria": {
+    "sentencia": "DESCRIBE TABLE system.access.audit",
+    "id": "01f1e852-d510-1cc7-9275-d7f43c1c6475",
+    "estado": "SUCCEEDED",
+    "error": ""
+  }
+}

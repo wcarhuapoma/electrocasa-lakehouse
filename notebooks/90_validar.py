@@ -25,11 +25,23 @@ spark.sql(f"""
 
 # Muestra conteos por capa, incluyendo sus tablas de control.
 counts = []
+gold_fingerprints = {}
 for layer in ("bronze", "silver", "gold"):
     tables = spark.sql(f"SHOW TABLES IN {catalog}.{layer}").where("NOT isTemporary").collect()
     for row in tables:
         name = row.tableName
-        count = spark.table(f"{catalog}.{layer}.`{name}`").count()
+        dataset = spark.table(f"{catalog}.{layer}.`{name}`")
+        if layer == "gold":
+            # Resume el contenido completo de Gold de forma estable y sin exportar filas.
+            row_hash = F.sha2(F.to_json(F.struct("*"), {"ignoreNullFields": "false"}), 256)
+            summary = dataset.agg(
+                F.count("*").alias("filas"),
+                F.sha2(F.concat_ws("", F.sort_array(F.collect_list(row_hash))), 256).alias("huella"),
+            ).first()
+            count = summary.filas
+            gold_fingerprints[name] = summary.huella
+        else:
+            count = dataset.count()
         counts.append((layer, name, count))
 display(spark.createDataFrame(sorted(counts), "capa string, tabla string, filas long"))
 
@@ -57,5 +69,6 @@ dbutils.notebook.exit(json.dumps({
     "run_id": run_id,
     "conteos": [{"capa": layer, "tabla": name, "filas": count} for layer, name, count in sorted(counts)],
     "rechazos": [row.asDict() for row in rejections.collect()],
+    "huellas_gold": gold_fingerprints,
     "historial_tracking": [row.asDict(recursive=True) for row in tracking_history.collect()],
 }, ensure_ascii=False, default=str))

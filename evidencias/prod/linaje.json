@@ -1,0 +1,36 @@
+{
+  "consulta_system": {
+    "id": "01f1e854-27be-1d94-9ced-26694faa1361",
+    "estado": "SUCCEEDED",
+    "error": null
+  },
+  "origenes_por_tabla": {
+    "electrocasa_prod.gold.ventas_netas": [
+      "electrocasa_prod.silver.devoluciones",
+      "electrocasa_prod.silver.ventas"
+    ],
+    "electrocasa_prod.gold.ranking_productos": [
+      "electrocasa_prod.silver.catalogo",
+      "electrocasa_prod.silver.devoluciones",
+      "electrocasa_prod.silver.ventas"
+    ],
+    "electrocasa_prod.gold.dotacion_mensual": [
+      "electrocasa_prod.silver.empleados",
+      "electrocasa_prod.silver.sucursales"
+    ],
+    "electrocasa_prod.gold.ventas_por_vendedor": [
+      "electrocasa_prod.silver.empleados",
+      "electrocasa_prod.silver.ventas"
+    ],
+    "electrocasa_prod.gold.resenas_negativas": [
+      "electrocasa_prod.silver.catalogo_categorias",
+      "electrocasa_prod.silver.resenas"
+    ],
+    "electrocasa_prod.gold.despachos_por_courier": [
+      "electrocasa_prod.silver.tracking_envios"
+    ],
+    "electrocasa_prod.gold.empleados_actuales": [
+      "electrocasa_prod.silver.empleados"
+    ]
+  }
+}

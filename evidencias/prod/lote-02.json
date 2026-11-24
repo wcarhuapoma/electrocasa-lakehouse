@@ -1,0 +1,220 @@
+{
+  "run_id": "731096631223045",
+  "conteos": [
+    {
+      "capa": "bronze",
+      "tabla": "catalogo",
+      "filas": 4705
+    },
+    {
+      "capa": "bronze",
+      "tabla": "devoluciones",
+      "filas": 3091
+    },
+    {
+      "capa": "bronze",
+      "tabla": "empleados",
+      "filas": 3524
+    },
+    {
+      "capa": "bronze",
+      "tabla": "resenas",
+      "filas": 9280
+    },
+    {
+      "capa": "bronze",
+      "tabla": "sucursales",
+      "filas": 40
+    },
+    {
+      "capa": "bronze",
+      "tabla": "tracking_envios",
+      "filas": 15139
+    },
+    {
+      "capa": "bronze",
+      "tabla": "ventas",
+      "filas": 13622
+    },
+    {
+      "capa": "gold",
+      "tabla": "despachos_por_courier",
+      "filas": 3
+    },
+    {
+      "capa": "gold",
+      "tabla": "dotacion_mensual",
+      "filas": 320
+    },
+    {
+      "capa": "gold",
+      "tabla": "empleados_actuales",
+      "filas": 1151
+    },
+    {
+      "capa": "gold",
+      "tabla": "ranking_productos",
+      "filas": 20
+    },
+    {
+      "capa": "gold",
+      "tabla": "resenas_negativas",
+      "filas": 40
+    },
+    {
+      "capa": "gold",
+      "tabla": "ventas_netas",
+      "filas": 240
+    },
+    {
+      "capa": "gold",
+      "tabla": "ventas_por_vendedor",
+      "filas": 4078
+    },
+    {
+      "capa": "silver",
+      "tabla": "advertencias",
+      "filas": 125
+    },
+    {
+      "capa": "silver",
+      "tabla": "catalogo",
+      "filas": 2393
+    },
+    {
+      "capa": "silver",
+      "tabla": "catalogo_categorias",
+      "filas": 2400
+    },
+    {
+      "capa": "silver",
+      "tabla": "correcciones",
+      "filas": 0
+    },
+    {
+      "capa": "silver",
+      "tabla": "cuarentena",
+      "filas": 5026
+    },
+    {
+      "capa": "silver",
+      "tabla": "cuarentena_historial",
+      "filas": 14916
+    },
+    {
+      "capa": "silver",
+      "tabla": "devoluciones",
+      "filas": 2877
+    },
+    {
+      "capa": "silver",
+      "tabla": "empleados",
+      "filas": 3495
+    },
+    {
+      "capa": "silver",
+      "tabla": "resenas",
+      "filas": 8985
+    },
+    {
+      "capa": "silver",
+      "tabla": "sucursales",
+      "filas": 40
+    },
+    {
+      "capa": "silver",
+      "tabla": "tracking_envios",
+      "filas": 11104
+    },
+    {
+      "capa": "silver",
+      "tabla": "ventas",
+      "filas": 13118
+    }
+  ],
+  "rechazos": [
+    {
+      "fuente": "catalogo",
+      "filas_rechazadas": 93,
+      "violaciones": 93
+    },
+    {
+      "fuente": "devoluciones",
+      "filas_rechazadas": 184,
+      "violaciones": 324
+    },
+    {
+      "fuente": "empleados",
+      "filas_rechazadas": 29,
+      "violaciones": 29
+    },
+    {
+      "fuente": "resenas",
+      "filas_rechazadas": 216,
+      "violaciones": 216
+    },
+    {
+      "fuente": "tracking_envios",
+      "filas_rechazadas": 3972,
+      "violaciones": 3972
+    },
+    {
+      "fuente": "ventas",
+      "filas_rechazadas": 386,
+      "violaciones": 392
+    }
+  ],
+  "huellas_gold": {
+    "despachos_por_courier": "318601ffbf12a5168f4c00aa382bab316fdf7e01deaa3f22758ac4407060ef22",
+    "dotacion_mensual": "07132aa94c36553c93862d05f939dde68627b9d06e44d83cd75b2f86799b33af",
+    "empleados_actuales": "a9c0c9a2fef7ef77121de8015da88f26d86d76d41c364b293d8ff44e512c7cf1",
+    "ranking_productos": "9c3bbcab88e62e3300c4ae2457ecdd3d918756fa80ea01dc7106a099e4514314",
+    "resenas_negativas": "65e4105d2ac48b095733840629d84a9b838ae52554f8401f39b3e85e8388bb32",
+    "ventas_netas": "9cb752870db953b80642186c1cc2249f6a5b820332a29871728074401914dc01",
+    "ventas_por_vendedor": "1c17f88cbb940fec4654ff9118f6b03ee29ae57057332c0e56a3ff8546e9be05"
+  },
+  "historial_tracking": [
+    {
+      "version": 2,
+      "timestamp": "2026-11-24 22:06:02",
+      "operation": "MERGE",
+      "operationMetrics": {
+        "numTargetRowsCopied": "0",
+        "numTargetRowsDeleted": "0",
+        "numTargetBytesRemoved": "0",
+        "numTargetDeletionVectorsAdded": "0",
+        "numTargetRowsMatchedUpdated": "0",
+        "numTargetRowsMatchedDeleted": "0",
+        "numTargetRowsUpdated": "0",
+        "numTargetChangeFilesAdded": "0",
+        "numTargetRowsNotMatchedBySourceDeleted": "0",
+        "rewriteTimeMs": "1044",
+        "numTargetFilesAdded": "1",
+        "numTargetBytesAdded": "274406",
+        "executionTimeMs": "6782",
+        "materializeSourceTimeMs": "4241",
+        "numTargetRowsInserted": "15139",
+        "numTargetDeletionVectorsUpdated": "0",
+        "scanTimeMs": "1384",
+        "numOutputRows": "15139",
+        "numTargetDeletionVectorsRemoved": "0",
+        "numTargetRowsNotMatchedBySourceUpdated": "0",
+        "numSourceRows": "15139",
+        "numTargetFilesRemoved": "0"
+      }
+    },
+    {
+      "version": 1,
+      "timestamp": "2026-11-24 22:05:39",
+      "operation": "DLT SETUP",
+      "operationMetrics": {}
+    },
+    {
+      "version": 0,
+      "timestamp": "2026-11-24 22:05:38",
+      "operation": "CREATE TABLE",
+      "operationMetrics": {}
+    }
+  ],
+  "run_url": "https://dbc-02d8efd4-96e8.cloud.databricks.com/?o=7474644067615801#job/294303803545328/run/731096631223045"
+}

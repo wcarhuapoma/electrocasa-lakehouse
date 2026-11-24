@@ -1,0 +1,20 @@
+{
+  "id": "01f1e85b-c9cb-1973-9d54-c7fe4fcdb32a",
+  "estado": "SUCCEEDED",
+  "columnas": [
+    "empleados_gold",
+    "dni_visibles",
+    "salarios_visibles",
+    "dni_enmascarados",
+    "diferencias_con_silver"
+  ],
+  "filas": [
+    [
+      "1129",
+      "1110",
+      "1125",
+      "0",
+      "0"
+    ]
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "caso": "venta sintética con monto negativo",
+  "rechazos_antes": 1,
+  "rechazos_despues": 0,
+  "filas_aceptadas": 1,
+  "revision_aplicada": 2,
+  "bronze_original_conservado": true,
+  "repeticion_idempotente": true,
+  "run_url": "https://dbc-02d8efd4-96e8.cloud.databricks.com/?o=7474644067615801#job/721074040975730/run/950718656235332"
+}

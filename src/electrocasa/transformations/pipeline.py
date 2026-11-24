@@ -1,6 +1,8 @@
 from pyspark import pipelines as dp
 from pyspark.sql import Window, functions as F
 
+from electrocasa.utils.normalizacion import COURIERS, mapped, slug
+
 # Comparte el catálogo de cada target entre las tres capas.
 CAT = spark.conf.get("electrocasa.catalog")
 LANDING = f"/Volumes/{CAT}/default/vol_landing"
@@ -100,18 +102,6 @@ def ids(df, *columns):
     return df
 
 
-def slug(column):
-    # Estandariza acentos, mayúsculas y separadores.
-    clean = F.translate(F.lower(F.trim(column)), "áéíóúüñ", "aeiouun")
-    return F.regexp_replace(clean, r"[\s-]+", "_")
-
-
-def mapped(column, values):
-    # Traduce variantes a los valores canónicos de cada fuente.
-    mapping = F.create_map(*[F.lit(item) for pair in values.items() for item in pair])
-    return F.element_at(mapping, slug(column))
-
-
 def date(column):
     # Lee las fechas ISO y día/mes sin propagar errores de conversión ANSI.
     value = F.trim(column.cast("string"))
@@ -163,7 +153,8 @@ RULES = {
     },
     "resenas": {
         "calificacion_en_escala": "calificacion BETWEEN 1 AND 5",
-        "resena_asociada": "resena_id IS NOT NULL AND fecha_resena IS NOT NULL AND _producto_valido",
+        "resena_asociada": "resena_id IS NOT NULL AND fecha_resena IS NOT NULL AND _producto_existe",
+        "categoria_actual_valida": "NOT _producto_existe OR _categoria_valida",
     },
     "devoluciones": {
         "reembolso_valido": "monto_reembolso BETWEEN 0 AND _monto_venta",
@@ -172,7 +163,8 @@ RULES = {
     },
     "tracking_envios": {
         "estado_conocido": "estado_entrega IS NOT NULL",
-        "evento_asociado": "evento_id IS NOT NULL AND tracking_id IS NOT NULL AND courier IS NOT NULL "
+        "courier_conocido": "courier IS NOT NULL",
+        "evento_asociado": "evento_id IS NOT NULL AND tracking_id IS NOT NULL "
                            "AND fecha_modificacion IS NOT NULL AND _venta_valida",
     },
     "sucursales": {"sucursal_identificable": "sucursal_id IS NOT NULL AND fecha_apertura IS NOT NULL"},
@@ -188,6 +180,18 @@ def valid_product(df):
     # Marca la cobertura de catálogo sin perder los hechos financieros.
     products = table("silver", "catalogo").select("producto_id").withColumn("_producto_valido", F.lit(True))
     return df.join(products, "producto_id", "left").fillna(False, ["_producto_valido"])
+
+
+@dp.materialized_view(name="silver.catalogo_categorias")
+def product_categories():
+    # Resuelve la categoría en la última aparición aunque el precio se rechace.
+    products = spark.read.table("_candidatos_catalogo").where(
+        "producto_id IS NOT NULL AND fecha_snapshot IS NOT NULL"
+    )
+    return latest(products, ["producto_id"], F.desc("fecha_snapshot"),
+                  F.col("categoria").isNotNull().desc(), F.asc("registro_id")).select(
+                      "producto_id", "categoria", "fecha_snapshot"
+                  )
 
 
 def candidates(source):
@@ -220,9 +224,15 @@ def candidates(source):
                   .select("dni", F.lit(True).alias("_dni_compartido")))
         return df.join(shared, "dni", "left").fillna(False, ["_dni_compartido"])
     if source == "resenas":
-        return valid_product(ids(df, "resena_id", "producto_id")
-                             .withColumn("fecha_resena", date(F.col("fecha_resena")))
-                             .withColumn("calificacion", F.col("calificacion").try_cast("int")))
+        categories = table("silver", "catalogo_categorias").select(
+            "producto_id", F.lit(True).alias("_producto_existe"),
+            F.col("categoria").isNotNull().alias("_categoria_valida"),
+        )
+        return (ids(df, "resena_id", "producto_id")
+                .withColumn("fecha_resena", date(F.col("fecha_resena")))
+                .withColumn("calificacion", F.col("calificacion").try_cast("int"))
+                .join(categories, "producto_id", "left")
+                .fillna(False, ["_producto_existe", "_categoria_valida"]))
     if source == "devoluciones":
         sales = table("silver", "ventas").select("venta_id", F.col("monto_total").alias("_monto_venta"))
         return (valid_product(ids(df, "devolucion_id", "venta_id", "producto_id", "sucursal_id")
@@ -231,7 +241,7 @@ def candidates(source):
                 .join(sales, "venta_id", "left"))
     sales = (table("silver", "ventas").where("canal = 'ecommerce'")
              .select("venta_id", F.lit(True).alias("_venta_valida")))
-    return (ids(df, "tracking_id", "venta_id", "courier").withColumn("courier", slug("courier"))
+    return (ids(df, "tracking_id", "venta_id", "courier").withColumn("courier", mapped("courier", COURIERS))
             .withColumn("estado_entrega", mapped("estado_entrega", STATUS))
             .withColumn("fecha_actualizacion", F.col("fecha_actualizacion").cast("date"))
             .withColumn("fecha_modificacion", F.col("fecha_modificacion").cast("timestamp"))
@@ -319,18 +329,23 @@ EMPLOYEE_MASKS = (
 @dp.materialized_view(
     name="silver.empleados",
     schema="id_empleado STRING, nombre STRING, email STRING, sucursal_id STRING, cargo STRING, "
-           "tipo_evento STRING, fecha_registro TIMESTAMP, vigente_desde DATE, vigente_hasta DATE, "
+           "tipo_evento STRING, fecha_evento DATE, fecha_registro TIMESTAMP, vigente_desde DATE, vigente_hasta DATE, "
            "activo BOOLEAN, registro_id STRING, " + EMPLOYEE_MASKS,
 )
 def employee_history():
     # Ordena todos los eventos y deja intervalos de fecha semiabiertos.
     events = spark.read.table("_empleados_eventos")
     order = Window.partitionBy("id_empleado").orderBy("fecha_evento", "fecha_registro", "registro_id")
+    elapsed = order.rowsBetween(Window.unboundedPreceding, Window.currentRow)
+    # Solo alta y baja modifican el estado; el resto conserva la última transición.
+    transition = (F.when(F.col("tipo_evento") == "alta", F.lit(True))
+                  .when(F.col("tipo_evento") == "baja", F.lit(False)))
     history = (events.withColumn("vigente_hasta", F.lead("fecha_evento").over(order))
-               .withColumn("activo", F.col("tipo_evento") != "baja")
-               .withColumnRenamed("fecha_evento", "vigente_desde"))
+               .withColumn("activo", F.coalesce(F.last(transition, ignorenulls=True).over(elapsed), F.lit(False)))
+               .withColumn("vigente_desde", F.col("fecha_evento")))
     return history.select("id_empleado", "nombre", "email", "sucursal_id", "cargo", "tipo_evento",
-                          "fecha_registro", "vigente_desde", "vigente_hasta", "activo", "registro_id", "dni", "salario")
+                          "fecha_evento", "fecha_registro", "vigente_desde", "vigente_hasta",
+                          "activo", "registro_id", "dni", "salario")
 
 
 @dp.materialized_view(name="gold.empleados_actuales", schema="id_empleado STRING, sucursal_id STRING, " + EMPLOYEE_MASKS)
@@ -412,7 +427,7 @@ GOLD = {
         SELECT c.categoria, trunc(r.fecha_resena, 'MM') mes, count(*) resenas_validas,
                count_if(r.calificacion IN (1, 2)) resenas_negativas,
                100 * try_divide(count_if(r.calificacion IN (1, 2)), count(*)) porcentaje_negativas
-        FROM {CAT}.silver.resenas r JOIN {CAT}.silver.catalogo c USING (producto_id)
+        FROM {CAT}.silver.resenas r JOIN {CAT}.silver.catalogo_categorias c USING (producto_id)
         WHERE r.fecha_resena >= '{START}' AND r.fecha_resena < '{STOP}'
         GROUP BY 1, 2
     """,

@@ -1,5 +1,5 @@
 fuente: catalogo
-version: 1
+version: 2
 ultima_actualizacion: '2026-11-24'
 responsable: Gestión de productos
 llegada: JSON multilínea en /Volumes/<catalogo>/default/vol_landing/catalogo/
@@ -10,6 +10,14 @@ tabla_bronze: <catalogo>.bronze.catalogo
 tabla_silver: <catalogo>.silver.catalogo
 llave: producto_id
 historizacion: Última aparición válida; se conserva activo=false.
+dimension_resenas:
+  tabla_silver: <catalogo>.silver.catalogo_categorias
+  llave: producto_id
+  columnas:
+  - {nombre: producto_id, tipo: string, nulo: false}
+  - {nombre: categoria, tipo: string, nulo: true}
+  - {nombre: fecha_snapshot, tipo: date, nulo: false}
+  historizacion: Última aparición por producto. Una categoría inválida queda nula para identificar el rechazo en Reseñas.
 columnas:
 - nombre: producto_id
   tipo: string

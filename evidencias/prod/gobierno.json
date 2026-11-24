@@ -1,0 +1,154 @@
+{
+  "campos": [
+    "Principal",
+    "ActionType",
+    "ObjectType",
+    "ObjectKey"
+  ],
+  "antes": [
+    [
+      "<propietario>",
+      "MODIFY",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ],
+    [
+      "<propietario>",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ],
+    [
+      "<propietario>",
+      "USE SCHEMA",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ]
+  ],
+  "temporal": [
+    [
+      "<propietario>",
+      "MODIFY",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ],
+    [
+      "<propietario>",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ],
+    [
+      "<propietario>",
+      "USE SCHEMA",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ],
+    [
+      "account users",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ]
+  ],
+  "despues": [
+    [
+      "<propietario>",
+      "MODIFY",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ],
+    [
+      "<propietario>",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ],
+    [
+      "<propietario>",
+      "USE SCHEMA",
+      "SCHEMA",
+      "electrocasa_prod.silver"
+    ]
+  ],
+  "esquemas": {
+    "bronze": [
+      [
+        "<propietario>",
+        "MODIFY",
+        "SCHEMA",
+        "electrocasa_prod.bronze"
+      ],
+      [
+        "<propietario>",
+        "SELECT",
+        "SCHEMA",
+        "electrocasa_prod.bronze"
+      ],
+      [
+        "<propietario>",
+        "USE SCHEMA",
+        "SCHEMA",
+        "electrocasa_prod.bronze"
+      ]
+    ],
+    "silver": [
+      [
+        "<propietario>",
+        "MODIFY",
+        "SCHEMA",
+        "electrocasa_prod.silver"
+      ],
+      [
+        "<propietario>",
+        "SELECT",
+        "SCHEMA",
+        "electrocasa_prod.silver"
+      ],
+      [
+        "<propietario>",
+        "USE SCHEMA",
+        "SCHEMA",
+        "electrocasa_prod.silver"
+      ]
+    ],
+    "gold": [
+      [
+        "<propietario>",
+        "MODIFY",
+        "SCHEMA",
+        "electrocasa_prod.gold"
+      ],
+      [
+        "<propietario>",
+        "SELECT",
+        "SCHEMA",
+        "electrocasa_prod.gold"
+      ],
+      [
+        "<propietario>",
+        "USE SCHEMA",
+        "SCHEMA",
+        "electrocasa_prod.gold"
+      ],
+      [
+        "account users",
+        "SELECT",
+        "SCHEMA",
+        "electrocasa_prod.gold"
+      ],
+      [
+        "account users",
+        "USE SCHEMA",
+        "SCHEMA",
+        "electrocasa_prod.gold"
+      ]
+    ]
+  },
+  "auditoria": {
+    "id": "01f1e853-bb83-18d7-92a2-287f6a7059c7",
+    "estado": "SUCCEEDED",
+    "error": null,
+    "manage_catalogo_visible": 0
+  }
+}

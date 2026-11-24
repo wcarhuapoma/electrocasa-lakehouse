@@ -1,0 +1,86 @@
+{
+  "job_prod": 294303803545328,
+  "job_dev": 70172595208905,
+  "prod_pausado": "PAUSED",
+  "dev_pausado": "PAUSED",
+  "concurrencia": 1,
+  "alerta_configurada": true,
+  "tareas": [
+    {
+      "clave": "copy_into",
+      "depende_de": [],
+      "max_reintentos": 1,
+      "intervalo_ms": 60000
+    },
+    {
+      "clave": "medallion",
+      "depende_de": [
+        "tracking"
+      ],
+      "max_reintentos": 1,
+      "intervalo_ms": 60000
+    },
+    {
+      "clave": "tracking",
+      "depende_de": [
+        "copy_into"
+      ],
+      "max_reintentos": 1,
+      "intervalo_ms": 60000
+    },
+    {
+      "clave": "validar",
+      "depende_de": [
+        "medallion"
+      ],
+      "max_reintentos": 1,
+      "intervalo_ms": 60000
+    }
+  ],
+  "pipeline_tracking": "083ed29a-2d99-4861-931c-b6c387aaff2a",
+  "pipeline_medallion": "ca131b1f-8520-49aa-90f6-63ca19959db2",
+  "actualizaciones_tracking": [
+    {
+      "update_id": "fa168ec2-3e0c-406f-8a14-f9fc0a7e7a52",
+      "state": "COMPLETED",
+      "creation_time": 1795557914472
+    },
+    {
+      "update_id": "4ba840d0-4cb4-4aeb-ae8b-a688428f4523",
+      "state": "COMPLETED",
+      "creation_time": 1795558190251
+    },
+    {
+      "update_id": "d6ab2f7f-c55e-479e-b6b0-45891d0c96da",
+      "state": "COMPLETED",
+      "creation_time": 1795558489943
+    },
+    {
+      "update_id": "47763d40-8a39-48ce-a89a-59511bb2aff1",
+      "state": "COMPLETED",
+      "creation_time": 1795558743719
+    }
+  ],
+  "actualizaciones_medallion": [
+    {
+      "update_id": "faf8d066-bef6-4cf9-9af2-25d3b440904e",
+      "state": "COMPLETED",
+      "creation_time": 1795557976146
+    },
+    {
+      "update_id": "56b1732f-4db1-45af-9dfb-076a728f7838",
+      "state": "COMPLETED",
+      "creation_time": 1795558231917
+    },
+    {
+      "update_id": "70c285a7-7753-47a8-83c8-6282fcd40864",
+      "state": "COMPLETED",
+      "creation_time": 1795558531684
+    },
+    {
+      "update_id": "9b58b267-68dc-4723-a133-17930d26982d",
+      "state": "COMPLETED",
+      "creation_time": 1795558795487
+    }
+  ]
+}

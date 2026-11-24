@@ -1,5 +1,5 @@
 fuente: resenas
-version: 1
+version: 2
 ultima_actualizacion: '2026-11-24'
 responsable: Experiencia del cliente
 llegada: JSON Lines en /Volumes/<catalogo>/default/vol_landing/resenas/
@@ -8,6 +8,8 @@ frecuencia_esperada: Por lote de la fuente
 tabla_bronze: <catalogo>.bronze.resenas
 tabla_silver: <catalogo>.silver.resenas
 llave: resena_id
+depende_de:
+- silver.catalogo_categorias
 columnas:
 - nombre: resena_id
   tipo: string
@@ -45,13 +47,19 @@ reglas_de_calidad:
   destino_rechazos: silver.cuarentena
   justificacion: Protege las métricas y la integridad de las claves.
 - nombre: resena_asociada
-  condicion: coalesce((resena_id IS NOT NULL AND fecha_resena IS NOT NULL AND _producto_valido),
+  condicion: coalesce((resena_id IS NOT NULL AND fecha_resena IS NOT NULL AND _producto_existe),
     false)
   politica: drop
   destino_rechazos: silver.cuarentena
-  justificacion: Protege las métricas y la integridad de las claves.
+  justificacion: Excluye fechas o claves inválidas y productos ausentes de los snapshots.
+- nombre: categoria_actual_valida
+  condicion: coalesce((NOT _producto_existe OR _categoria_valida), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: La reseña del producto presente requiere una categoría válida en su último snapshot.
 transformaciones_silver:
 - Validar en Silver y conservar metadata como texto JSON.
+- Validar la categoría sin depender del precio del catálogo comercial.
 problemas_conocidos:
 - problema: Calificaciones fuera de escala y metadatos heterogéneos
   ejemplo: Calificación 0 o 6

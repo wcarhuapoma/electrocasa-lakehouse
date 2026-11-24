@@ -1,0 +1,44 @@
+{
+  "catalogo": {
+    "tipos_verificados": 6,
+    "reglas_verificadas": 2,
+    "diferencias_de_tipo": {},
+    "reglas_coinciden": true
+  },
+  "devoluciones": {
+    "tipos_verificados": 7,
+    "reglas_verificadas": 3,
+    "diferencias_de_tipo": {},
+    "reglas_coinciden": true
+  },
+  "empleados": {
+    "tipos_verificados": 13,
+    "reglas_verificadas": 4,
+    "diferencias_de_tipo": {},
+    "reglas_coinciden": true
+  },
+  "resenas": {
+    "tipos_verificados": 9,
+    "reglas_verificadas": 3,
+    "diferencias_de_tipo": {},
+    "reglas_coinciden": true
+  },
+  "sucursales": {
+    "tipos_verificados": 6,
+    "reglas_verificadas": 1,
+    "diferencias_de_tipo": {},
+    "reglas_coinciden": true
+  },
+  "tracking_envios": {
+    "tipos_verificados": 7,
+    "reglas_verificadas": 3,
+    "diferencias_de_tipo": {},
+    "reglas_coinciden": true
+  },
+  "ventas": {
+    "tipos_verificados": 9,
+    "reglas_verificadas": 4,
+    "diferencias_de_tipo": {},
+    "reglas_coinciden": true
+  }
+}

@@ -1,5 +1,5 @@
 fuente: tracking_envios
-version: 1
+version: 2
 ultima_actualizacion: '2026-11-24'
 responsable: Logística / courier
 llegada: Azure SQL Database, tabla dbo.TrackingEnvios
@@ -27,6 +27,10 @@ columnas:
 - nombre: courier
   tipo: string
   nulo: false
+  valores_permitidos:
+  - olva_courier
+  - servientrega
+  - shalom
 - nombre: estado_entrega
   tipo: string
   nulo: false
@@ -51,14 +55,20 @@ reglas_de_calidad:
   politica: drop
   destino_rechazos: silver.cuarentena
   justificacion: Protege las métricas y la integridad de las claves.
+- nombre: courier_conocido
+  condicion: coalesce((courier IS NOT NULL), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Evita agrupar eventos bajo un courier fuera del catálogo permitido.
 - nombre: evento_asociado
-  condicion: coalesce((evento_id IS NOT NULL AND tracking_id IS NOT NULL AND courier
-    IS NOT NULL AND fecha_modificacion IS NOT NULL AND _venta_valida), false)
+  condicion: coalesce((evento_id IS NOT NULL AND tracking_id IS NOT NULL AND
+    fecha_modificacion IS NOT NULL AND _venta_valida), false)
   politica: drop
   destino_rechazos: silver.cuarentena
   justificacion: Protege las métricas y la integridad de las claves.
 transformaciones_silver:
 - Estandarizar estados y deduplicar por envío, estado y fecha del cambio.
+- Unificar Olva y Olva Courier bajo olva_courier. Normalizar el casing de Servientrega y Shalom.
 problemas_conocidos:
 - problema: Estados inconsistentes y cambios de estado reprocesados
   ejemplo: En camino / EN_CAMINO

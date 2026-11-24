@@ -1,5 +1,5 @@
 fuente: empleados
-version: 1
+version: 2
 ultima_actualizacion: '2026-11-24'
 responsable: Recursos Humanos
 llegada: CSV en /Volumes/<catalogo>/default/vol_landing/empleados/
@@ -19,6 +19,7 @@ historizacion:
   eventos_mismo_dia: El último por fecha_registro representa el estado al cierre del
     día.
   llegada_tardia: Recalcular los intervalos sobre todos los eventos aceptados.
+  estado_activo: Lo determina la última alta o baja vigente. Una transferencia o un cambio de salario conserva ese estado.
 columnas:
 - nombre: id_empleado
   tipo: string
@@ -94,6 +95,7 @@ reglas_de_calidad:
   justificacion: Se puede conservar la fila y auditar la anomalía.
 transformaciones_silver:
 - Conservar el evento con salario nulo y reconstruir intervalos.
+- Conservar fecha_evento y utilizarla como inicio de la versión histórica.
 problemas_conocidos:
 - problema: Salarios atípicos y eventos registrados con retraso
   ejemplo: Salario de 20.000 o más
