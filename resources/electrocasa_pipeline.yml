@@ -1,0 +1,38 @@
+resources:
+  pipelines:
+    electrocasa_pipeline:
+      name: electrocasa-${bundle.target}-medallion
+      catalog: ${var.catalog}
+      schema: silver
+      serverless: true
+      continuous: false
+      channel: CURRENT
+      root_path: ../src/electrocasa/transformations
+      libraries:
+        - glob:
+            include: ../src/electrocasa/transformations/pipeline.py
+      configuration:
+        electrocasa.catalog: ${var.catalog}
+        spark.sql.session.timeZone: America/Lima
+
+    tracking_pipeline:
+      name: electrocasa-${bundle.target}-tracking
+      catalog: ${var.catalog}
+      target: bronze
+      serverless: true
+      ingestion_definition:
+        connection_name: ${var.tracking_connection}
+        objects:
+          - table:
+              source_catalog: ${var.tracking_database}
+              source_schema: dbo
+              source_table: TrackingEnvios
+              destination_catalog: ${var.catalog}
+              destination_schema: bronze
+              destination_table: tracking_envios
+              table_configuration:
+                scd_type: SCD_TYPE_1
+                primary_keys: [evento_id]
+                include_columns: [evento_id, tracking_id, venta_id, courier, estado_entrega, fecha_actualizacion, fecha_modificacion]
+                query_based_connector_config:
+                  cursor_columns: [fecha_modificacion]

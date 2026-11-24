@@ -1,0 +1,61 @@
+fuente: devoluciones
+version: 1
+ultima_actualizacion: '2026-11-24'
+responsable: Postventa
+llegada: CSV en /Volumes/<catalogo>/default/vol_landing/devoluciones/
+metodo_ingesta: Auto Loader para lotes transaccionales
+frecuencia_esperada: Por lote de la fuente
+tabla_bronze: <catalogo>.bronze.devoluciones
+tabla_silver: <catalogo>.silver.devoluciones
+llave: devolucion_id
+depende_de:
+- silver.ventas
+- silver.catalogo
+columnas:
+- nombre: devolucion_id
+  tipo: string
+  nulo: false
+- nombre: venta_id
+  tipo: string
+  nulo: false
+  regla: Referencia evaluada al actualizar Silver.
+- nombre: sucursal_id
+  tipo: string
+  nulo: false
+- nombre: producto_id
+  tipo: string
+  nulo: true
+- nombre: motivo
+  tipo: string
+  nulo: true
+- nombre: monto_reembolso
+  tipo: decimal(12,2)
+  nulo: false
+  regla: Entre cero y el monto de la venta original.
+- nombre: fecha_devolucion
+  tipo: date
+  nulo: false
+reglas_de_calidad:
+- nombre: reembolso_valido
+  condicion: coalesce((monto_reembolso BETWEEN 0 AND _monto_venta), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: devolucion_asociada
+  condicion: coalesce((devolucion_id IS NOT NULL AND sucursal_id IS NOT NULL AND fecha_devolucion
+    IS NOT NULL AND _monto_venta IS NOT NULL), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: producto_en_catalogo
+  condicion: coalesce((_producto_valido), false)
+  politica: warn
+  destino_rechazos: silver.advertencias
+  justificacion: Se puede conservar la fila y auditar la anomalía.
+transformaciones_silver:
+- Validar después del join con Ventas y reevaluar referencias por lote.
+problemas_conocidos:
+- problema: Reembolso fuera del rango de la venta original
+  ejemplo: Monto negativo o mayor que la venta
+  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  tratamiento: Validar después del join con Ventas y reevaluar referencias por lote.

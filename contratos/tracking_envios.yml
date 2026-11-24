@@ -1,0 +1,66 @@
+fuente: tracking_envios
+version: 1
+ultima_actualizacion: '2026-11-24'
+responsable: Logística / courier
+llegada: Azure SQL Database, tabla dbo.TrackingEnvios
+metodo_ingesta: Lakeflow Connect query-based SQL Server
+connection_unity_catalog: electrocasa_sqlserver
+cursor: fecha_modificacion
+modo_historia: SCD Tipo 1 por evento_id; tracking_id conserva sus múltiples eventos.
+frecuencia_esperada: Por corrida del job, con cursor persistente
+tabla_bronze: <catalogo>.bronze.tracking_envios
+tabla_silver: <catalogo>.silver.tracking_envios
+llave: evento_id
+depende_de:
+- silver.ventas
+columnas:
+- nombre: evento_id
+  tipo: int
+  nulo: false
+- nombre: tracking_id
+  tipo: string
+  nulo: false
+- nombre: venta_id
+  tipo: string
+  nulo: false
+  regla: Referencia evaluada al actualizar Silver.
+- nombre: courier
+  tipo: string
+  nulo: false
+- nombre: estado_entrega
+  tipo: string
+  nulo: false
+  valores_permitidos:
+  - pendiente
+  - en_transito
+  - entregado
+  - devuelto
+- nombre: sucursal_origen
+  tipo: string
+  nulo: true
+  regla: Columna del origen excluida de la proyección del conector.
+- nombre: fecha_actualizacion
+  tipo: date
+  nulo: true
+- nombre: fecha_modificacion
+  tipo: timestamp
+  nulo: false
+reglas_de_calidad:
+- nombre: estado_conocido
+  condicion: coalesce((estado_entrega IS NOT NULL), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: evento_asociado
+  condicion: coalesce((evento_id IS NOT NULL AND tracking_id IS NOT NULL AND courier
+    IS NOT NULL AND fecha_modificacion IS NOT NULL AND _venta_valida), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+transformaciones_silver:
+- Estandarizar estados y deduplicar por envío, estado y fecha del cambio.
+problemas_conocidos:
+- problema: Estados inconsistentes y cambios de estado reprocesados
+  ejemplo: En camino / EN_CAMINO
+  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  tratamiento: Estandarizar estados y deduplicar por envío, estado y fecha del cambio.

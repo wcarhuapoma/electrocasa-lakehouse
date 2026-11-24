@@ -1,0 +1,34 @@
+bundle:
+  name: electrocasa-lakehouse
+  engine: direct
+
+include:
+  - resources/*.yml
+
+sync:
+  exclude:
+    - datos/**
+    - evidencias/**
+
+variables:
+  catalog:
+    description: Catálogo administrado del entorno
+  tracking_connection:
+    default: electrocasa_sqlserver
+    description: Nombre de la conexión SQL Server en Unity Catalog
+  tracking_database:
+    description: Nombre de la base SQL entregado por el docente
+  alert_email:
+    description: Correo real del responsable del job
+  schedule_status:
+    default: PAUSED
+    description: Estado del disparador mensual
+
+targets:
+  dev:
+    default: true
+    variables:
+      catalog: electrocasa_dev
+  prod:
+    variables:
+      catalog: electrocasa_prod

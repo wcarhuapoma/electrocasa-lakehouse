@@ -1,0 +1,81 @@
+{
+  "campos": [
+    "Principal",
+    "ActionType",
+    "ObjectType",
+    "ObjectKey"
+  ],
+  "antes": [
+    [
+      "<propietario>",
+      "MODIFY",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ],
+    [
+      "<propietario>",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ],
+    [
+      "<propietario>",
+      "USE SCHEMA",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ]
+  ],
+  "temporal": [
+    [
+      "<propietario>",
+      "MODIFY",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ],
+    [
+      "<propietario>",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ],
+    [
+      "<propietario>",
+      "USE SCHEMA",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ],
+    [
+      "account users",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ]
+  ],
+  "despues": [
+    [
+      "<propietario>",
+      "MODIFY",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ],
+    [
+      "<propietario>",
+      "SELECT",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ],
+    [
+      "<propietario>",
+      "USE SCHEMA",
+      "SCHEMA",
+      "electrocasa_dev.silver"
+    ]
+  ],
+  "mascara_propietario": [
+    [
+      "1102",
+      "0",
+      "1097"
+    ]
+  ]
+}

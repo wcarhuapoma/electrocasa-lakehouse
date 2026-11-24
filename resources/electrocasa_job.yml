@@ -1,0 +1,43 @@
+resources:
+  jobs:
+    electrocasa_job:
+      name: electrocasa-${bundle.target}-job
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      schedule:
+        quartz_cron_expression: '0 0 8 1 * ?'
+        timezone_id: America/Lima
+        pause_status: ${var.schedule_status}
+      email_notifications:
+        on_failure:
+          - ${var.alert_email}
+      tasks:
+        - task_key: copy_into
+          max_retries: 1
+          min_retry_interval_millis: 60000
+          notebook_task:
+            notebook_path: ../notebooks/10_copy_into.py
+            base_parameters:
+              catalog: ${var.catalog}
+        - task_key: tracking
+          depends_on: [{task_key: copy_into}]
+          max_retries: 1
+          min_retry_interval_millis: 60000
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.tracking_pipeline.id}
+        - task_key: medallion
+          depends_on: [{task_key: tracking}]
+          max_retries: 1
+          min_retry_interval_millis: 60000
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.electrocasa_pipeline.id}
+        - task_key: validar
+          depends_on: [{task_key: medallion}]
+          max_retries: 1
+          min_retry_interval_millis: 60000
+          notebook_task:
+            notebook_path: ../notebooks/90_validar.py
+            base_parameters:
+              catalog: ${var.catalog}
+              run_id: '{{job.run_id}}'

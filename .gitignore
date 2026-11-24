@@ -1,0 +1,10 @@
+.databricks/
+__pycache__/
+.pytest_cache/
+.venv/
+.env
+.env.*
+datos/**/*.csv
+datos/**/*.json
+*.pyc
+evidencias/local/

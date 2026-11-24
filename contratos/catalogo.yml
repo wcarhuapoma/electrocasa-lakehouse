@@ -1,0 +1,57 @@
+fuente: catalogo
+version: 1
+ultima_actualizacion: '2026-11-24'
+responsable: Gestión de productos
+llegada: JSON multilínea en /Volumes/<catalogo>/default/vol_landing/catalogo/
+metodo_ingesta: COPY INTO para snapshots completos
+frecuencia_esperada: Por snapshot publicado
+tipo_entrega: Snapshot completo
+tabla_bronze: <catalogo>.bronze.catalogo
+tabla_silver: <catalogo>.silver.catalogo
+llave: producto_id
+historizacion: Última aparición válida; se conserva activo=false.
+columnas:
+- nombre: producto_id
+  tipo: string
+  nulo: false
+- nombre: nombre_producto
+  tipo: string
+  nulo: true
+- nombre: categoria
+  tipo: string
+  nulo: false
+  valores_permitidos:
+  - linea_blanca
+  - climatizacion
+  - cocina
+  - electronica
+  - entretenimiento
+- nombre: marca
+  tipo: string
+  nulo: true
+- nombre: precio_lista
+  tipo: decimal(12,2)
+  nulo: false
+  regla: Mayor a cero
+- nombre: activo
+  tipo: boolean
+  nulo: false
+reglas_de_calidad:
+- nombre: precio_valido
+  condicion: coalesce((precio_lista > 0), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: producto_identificable
+  condicion: coalesce((producto_id IS NOT NULL AND categoria IS NOT NULL AND activo
+    IS NOT NULL), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+transformaciones_silver:
+- Conservar el último snapshot válido por producto, incluido activo=false.
+problemas_conocidos:
+- problema: Precio con símbolo monetario y productos descontinuados
+  ejemplo: S/ 1,299.90
+  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  tratamiento: Conservar el último snapshot válido por producto, incluido activo=false.

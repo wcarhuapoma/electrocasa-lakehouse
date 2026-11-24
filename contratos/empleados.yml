@@ -1,0 +1,101 @@
+fuente: empleados
+version: 1
+ultima_actualizacion: '2026-11-24'
+responsable: Recursos Humanos
+llegada: CSV en /Volumes/<catalogo>/default/vol_landing/empleados/
+metodo_ingesta: Auto Loader para lotes de eventos CSV
+frecuencia_esperada: Por lote de la fuente
+tabla_bronze: <catalogo>.bronze.empleados
+tabla_silver: <catalogo>.silver.empleados
+llave_evento: id_empleado, fecha_evento, fecha_registro
+llave_entidad: id_empleado
+historizacion:
+  tipo: SCD Type 2
+  implementacion: Intervalos semiabiertos con LEAD por empleado
+  columnas_de_vigencia:
+  - vigente_desde
+  - vigente_hasta
+  orden_de_los_cambios: fecha_evento, fecha_registro, registro_id
+  eventos_mismo_dia: El último por fecha_registro representa el estado al cierre del
+    día.
+  llegada_tardia: Recalcular los intervalos sobre todos los eventos aceptados.
+columnas:
+- nombre: id_empleado
+  tipo: string
+  nulo: false
+- nombre: nombre
+  tipo: string
+  nulo: true
+- nombre: dni
+  tipo: string
+  nulo: true
+  sensible: true
+  masking: Valor real para Ingeniería; *** para otras identidades.
+- nombre: email
+  tipo: string
+  nulo: true
+- nombre: salario
+  tipo: decimal(12,2)
+  nulo: true
+  regla: Nulo si está fuera de [500, 20000); conservar evento y advertencia.
+  sensible: true
+  masking: Valor real para Ingeniería; NULL para otras identidades.
+- nombre: sucursal_id
+  tipo: string
+  nulo: true
+- nombre: cargo
+  tipo: string
+  nulo: true
+- nombre: tipo_evento
+  tipo: string
+  nulo: false
+  valores_permitidos:
+  - alta
+  - transferencia
+  - cambio_salario
+  - baja
+- nombre: fecha_evento
+  tipo: date
+  nulo: false
+- nombre: fecha_registro
+  tipo: timestamp
+  nulo: false
+- nombre: vigente_desde
+  tipo: date
+  nulo: false
+- nombre: vigente_hasta
+  tipo: date
+  nulo: true
+- nombre: activo
+  tipo: boolean
+  nulo: false
+reglas_de_calidad:
+- nombre: evento_ubicable
+  condicion: coalesce((id_empleado IS NOT NULL AND fecha_evento IS NOT NULL AND fecha_registro
+    IS NOT NULL), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: tipo_evento_valido
+  condicion: coalesce((tipo_evento IS NOT NULL AND (tipo_evento = 'baja' OR sucursal_id
+    IS NOT NULL)), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: salario_en_rango
+  condicion: coalesce((NOT _salario_invalido), false)
+  politica: warn
+  destino_rechazos: silver.advertencias
+  justificacion: Se puede conservar la fila y auditar la anomalía.
+- nombre: dni_no_compartido
+  condicion: coalesce((NOT _dni_compartido), false)
+  politica: warn
+  destino_rechazos: silver.advertencias
+  justificacion: Se puede conservar la fila y auditar la anomalía.
+transformaciones_silver:
+- Conservar el evento con salario nulo y reconstruir intervalos.
+problemas_conocidos:
+- problema: Salarios atípicos y eventos registrados con retraso
+  ejemplo: Salario de 20.000 o más
+  filas_afectadas: 18 salarios >= 20.000 en los archivos locales.
+  tratamiento: Conservar el evento con salario nulo y reconstruir intervalos.

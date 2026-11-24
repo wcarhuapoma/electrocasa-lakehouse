@@ -1,0 +1,59 @@
+fuente: resenas
+version: 1
+ultima_actualizacion: '2026-11-24'
+responsable: Experiencia del cliente
+llegada: JSON Lines en /Volumes/<catalogo>/default/vol_landing/resenas/
+metodo_ingesta: Auto Loader para lotes de objetos JSON
+frecuencia_esperada: Por lote de la fuente
+tabla_bronze: <catalogo>.bronze.resenas
+tabla_silver: <catalogo>.silver.resenas
+llave: resena_id
+columnas:
+- nombre: resena_id
+  tipo: string
+  nulo: false
+- nombre: producto_id
+  tipo: string
+  nulo: false
+  regla: Referencia evaluada al actualizar Silver.
+- nombre: cliente_id
+  tipo: string
+  nulo: true
+- nombre: calificacion
+  tipo: int
+  nulo: false
+  regla: Entero entre 1 y 5
+- nombre: comentario
+  tipo: string
+  nulo: true
+- nombre: tags
+  tipo: array<string>
+  nulo: true
+- nombre: respuestas
+  tipo: array<struct<autor:string,texto:string,fecha:string>>
+  nulo: true
+- nombre: fecha_resena
+  tipo: date
+  nulo: false
+- nombre: metadata
+  tipo: string
+  nulo: true
+reglas_de_calidad:
+- nombre: calificacion_en_escala
+  condicion: coalesce((calificacion BETWEEN 1 AND 5), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: resena_asociada
+  condicion: coalesce((resena_id IS NOT NULL AND fecha_resena IS NOT NULL AND _producto_valido),
+    false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+transformaciones_silver:
+- Validar en Silver y conservar metadata como texto JSON.
+problemas_conocidos:
+- problema: Calificaciones fuera de escala y metadatos heterogéneos
+  ejemplo: Calificación 0 o 6
+  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  tratamiento: Validar en Silver y conservar metadata como texto JSON.

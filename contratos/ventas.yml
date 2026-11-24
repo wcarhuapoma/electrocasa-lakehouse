@@ -1,0 +1,79 @@
+fuente: ventas
+version: 1
+ultima_actualizacion: '2026-11-24'
+responsable: Comercial
+llegada: CSV en /Volumes/<catalogo>/default/vol_landing/ventas/
+metodo_ingesta: Auto Loader para lotes CSV recurrentes
+frecuencia_esperada: Por lote de la fuente
+tabla_bronze: <catalogo>.bronze.ventas
+tabla_silver: <catalogo>.silver.ventas
+llave: venta_id
+columnas:
+- nombre: venta_id
+  tipo: string
+  nulo: false
+- nombre: sucursal_id
+  tipo: string
+  nulo: false
+- nombre: producto_id
+  tipo: string
+  nulo: true
+  regla: Referencia evaluada al actualizar Silver.
+- nombre: vendedor_id
+  tipo: string
+  nulo: true
+- nombre: cantidad
+  tipo: int
+  nulo: false
+  regla: Mayor a cero
+- nombre: monto_total
+  tipo: decimal(12,2)
+  nulo: false
+  regla: Mayor a cero
+- nombre: metodo_pago
+  tipo: string
+  nulo: true
+  valores_permitidos:
+  - efectivo
+  - tarjeta
+  - transferencia
+  - yape
+  - plin
+- nombre: fecha_venta
+  tipo: date
+  nulo: false
+- nombre: canal
+  tipo: string
+  nulo: false
+  valores_permitidos:
+  - tienda_fisica
+  - ecommerce
+reglas_de_calidad:
+- nombre: monto_positivo
+  condicion: coalesce((monto_total > 0), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: venta_ubicable
+  condicion: coalesce((venta_id IS NOT NULL AND sucursal_id IS NOT NULL AND fecha_venta
+    IS NOT NULL AND cantidad > 0 AND canal IN ('tienda_fisica', 'ecommerce')), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+- nombre: metodo_conocido
+  condicion: coalesce((metodo_pago IS NOT NULL), false)
+  politica: warn
+  destino_rechazos: silver.advertencias
+  justificacion: Se puede conservar la fila y auditar la anomalía.
+- nombre: producto_en_catalogo
+  condicion: coalesce((_producto_valido), false)
+  politica: warn
+  destino_rechazos: silver.advertencias
+  justificacion: Se puede conservar la fila y auditar la anomalía.
+transformaciones_silver:
+- Normalizar decimales y deduplicar por venta_id.
+problemas_conocidos:
+- problema: Formatos de monto heterogéneos y reingestas
+  ejemplo: 1.234,50
+  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  tratamiento: Normalizar decimales y deduplicar por venta_id.

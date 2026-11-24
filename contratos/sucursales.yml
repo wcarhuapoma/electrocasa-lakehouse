@@ -1,0 +1,42 @@
+fuente: sucursales
+version: 1
+ultima_actualizacion: '2026-11-24'
+responsable: Operaciones de tiendas
+llegada: CSV en /Volumes/<catalogo>/default/vol_landing/sucursales/
+metodo_ingesta: COPY INTO idempotente para el archivo de referencia
+frecuencia_esperada: Ante cambios del maestro
+tabla_bronze: <catalogo>.bronze.sucursales
+tabla_silver: <catalogo>.silver.sucursales
+llave: sucursal_id
+columnas:
+- nombre: sucursal_id
+  tipo: string
+  nulo: false
+- nombre: nombre_sucursal
+  tipo: string
+  nulo: true
+- nombre: distrito
+  tipo: string
+  nulo: true
+- nombre: ciudad
+  tipo: string
+  nulo: true
+- nombre: region
+  tipo: string
+  nulo: true
+- nombre: fecha_apertura
+  tipo: date
+  nulo: false
+reglas_de_calidad:
+- nombre: sucursal_identificable
+  condicion: coalesce((sucursal_id IS NOT NULL AND fecha_apertura IS NOT NULL), false)
+  politica: drop
+  destino_rechazos: silver.cuarentena
+  justificacion: Protege las métricas y la integridad de las claves.
+transformaciones_silver:
+- Estandarizar con initcap.
+problemas_conocidos:
+- problema: Variantes de mayúsculas en ciudad
+  ejemplo: Ciudad con casing inconsistente
+  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  tratamiento: Estandarizar con initcap.
