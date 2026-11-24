@@ -1,0 +1,9 @@
+{
+  "neto_conciliado": true,
+  "un_grano_por_producto_y_ranking": true,
+  "dotacion_para_todas_las_sucursales_y_meses": true,
+  "ventas_fisicas_sin_multiplicar": true,
+  "resenas_fuera_de_escala_excluidas": true,
+  "eventos_reprocesados_eliminados": true,
+  "despachos_con_porcentajes_validos": true
+}

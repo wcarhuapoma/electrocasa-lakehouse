@@ -1,1 +1,205 @@
-{"run_id": "628637681475647", "conteos": [{"capa": "bronze", "tabla": "catalogo", "filas": 2305}, {"capa": "bronze", "tabla": "devoluciones", "filas": 1387}, {"capa": "bronze", "tabla": "empleados", "filas": 2257}, {"capa": "bronze", "tabla": "resenas", "filas": 5292}, {"capa": "bronze", "tabla": "sucursales", "filas": 40}, {"capa": "bronze", "tabla": "tracking_envios", "filas": 15139}, {"capa": "bronze", "tabla": "ventas", "filas": 6783}, {"capa": "gold", "tabla": "despachos_por_courier", "filas": 4}, {"capa": "gold", "tabla": "dotacion_mensual", "filas": 320}, {"capa": "gold", "tabla": "empleados_actuales", "filas": 1102}, {"capa": "gold", "tabla": "ranking_productos", "filas": 20}, {"capa": "gold", "tabla": "resenas_negativas", "filas": 25}, {"capa": "gold", "tabla": "ventas_netas", "filas": 120}, {"capa": "gold", "tabla": "ventas_por_vendedor", "filas": 2011}, {"capa": "silver", "tabla": "advertencias", "filas": 192}, {"capa": "silver", "tabla": "catalogo", "filas": 2238}, {"capa": "silver", "tabla": "correcciones", "filas": 0}, {"capa": "silver", "tabla": "cuarentena", "filas": 9995}, {"capa": "silver", "tabla": "cuarentena_historial", "filas": 9995}, {"capa": "silver", "tabla": "devoluciones", "filas": 1301}, {"capa": "silver", "tabla": "empleados", "filas": 2239}, {"capa": "silver", "tabla": "resenas", "filas": 5064}, {"capa": "silver", "tabla": "sucursales", "filas": 40}, {"capa": "silver", "tabla": "tracking_envios", "filas": 5729}, {"capa": "silver", "tabla": "ventas", "filas": 6604}], "rechazos": [{"fuente": "catalogo", "filas_rechazadas": 42, "violaciones": 42}, {"fuente": "devoluciones", "filas_rechazadas": 86, "violaciones": 150}, {"fuente": "empleados", "filas_rechazadas": 18, "violaciones": 18}, {"fuente": "resenas", "filas_rechazadas": 228, "violaciones": 232}, {"fuente": "tracking_envios", "filas_rechazadas": 9372, "violaciones": 9372}, {"fuente": "ventas", "filas_rechazadas": 179, "violaciones": 181}], "historial_tracking": [{"version": 2, "timestamp": "2026-11-24 19:38:58", "operation": "MERGE", "operationMetrics": {"numTargetRowsCopied": "0", "numTargetRowsDeleted": "0", "numTargetBytesRemoved": "0", "numTargetDeletionVectorsAdded": "0", "numTargetRowsMatchedUpdated": "0", "numTargetRowsMatchedDeleted": "0", "numTargetRowsUpdated": "0", "numTargetChangeFilesAdded": "0", "numTargetRowsNotMatchedBySourceDeleted": "0", "rewriteTimeMs": "1068", "numTargetFilesAdded": "1", "numTargetBytesAdded": "274406", "executionTimeMs": "7098", "materializeSourceTimeMs": "4472", "numTargetRowsInserted": "15139", "numTargetDeletionVectorsUpdated": "0", "scanTimeMs": "1427", "numOutputRows": "15139", "numTargetDeletionVectorsRemoved": "0", "numTargetRowsNotMatchedBySourceUpdated": "0", "numSourceRows": "15139", "numTargetFilesRemoved": "0"}}, {"version": 1, "timestamp": "2026-11-24 19:38:34", "operation": "DLT SETUP", "operationMetrics": {}}, {"version": 0, "timestamp": "2026-11-24 19:38:33", "operation": "CREATE TABLE", "operationMetrics": {}}]}
+{
+  "run_id": "628637681475647",
+  "conteos": [
+    {
+      "capa": "bronze",
+      "tabla": "catalogo",
+      "filas": 2305
+    },
+    {
+      "capa": "bronze",
+      "tabla": "devoluciones",
+      "filas": 1387
+    },
+    {
+      "capa": "bronze",
+      "tabla": "empleados",
+      "filas": 2257
+    },
+    {
+      "capa": "bronze",
+      "tabla": "resenas",
+      "filas": 5292
+    },
+    {
+      "capa": "bronze",
+      "tabla": "sucursales",
+      "filas": 40
+    },
+    {
+      "capa": "bronze",
+      "tabla": "tracking_envios",
+      "filas": 15139
+    },
+    {
+      "capa": "bronze",
+      "tabla": "ventas",
+      "filas": 6783
+    },
+    {
+      "capa": "gold",
+      "tabla": "despachos_por_courier",
+      "filas": 4
+    },
+    {
+      "capa": "gold",
+      "tabla": "dotacion_mensual",
+      "filas": 320
+    },
+    {
+      "capa": "gold",
+      "tabla": "empleados_actuales",
+      "filas": 1102
+    },
+    {
+      "capa": "gold",
+      "tabla": "ranking_productos",
+      "filas": 20
+    },
+    {
+      "capa": "gold",
+      "tabla": "resenas_negativas",
+      "filas": 25
+    },
+    {
+      "capa": "gold",
+      "tabla": "ventas_netas",
+      "filas": 120
+    },
+    {
+      "capa": "gold",
+      "tabla": "ventas_por_vendedor",
+      "filas": 2011
+    },
+    {
+      "capa": "silver",
+      "tabla": "advertencias",
+      "filas": 192
+    },
+    {
+      "capa": "silver",
+      "tabla": "catalogo",
+      "filas": 2238
+    },
+    {
+      "capa": "silver",
+      "tabla": "correcciones",
+      "filas": 0
+    },
+    {
+      "capa": "silver",
+      "tabla": "cuarentena",
+      "filas": 9995
+    },
+    {
+      "capa": "silver",
+      "tabla": "cuarentena_historial",
+      "filas": 9995
+    },
+    {
+      "capa": "silver",
+      "tabla": "devoluciones",
+      "filas": 1301
+    },
+    {
+      "capa": "silver",
+      "tabla": "empleados",
+      "filas": 2239
+    },
+    {
+      "capa": "silver",
+      "tabla": "resenas",
+      "filas": 5064
+    },
+    {
+      "capa": "silver",
+      "tabla": "sucursales",
+      "filas": 40
+    },
+    {
+      "capa": "silver",
+      "tabla": "tracking_envios",
+      "filas": 5729
+    },
+    {
+      "capa": "silver",
+      "tabla": "ventas",
+      "filas": 6604
+    }
+  ],
+  "rechazos": [
+    {
+      "fuente": "catalogo",
+      "filas_rechazadas": 42,
+      "violaciones": 42
+    },
+    {
+      "fuente": "devoluciones",
+      "filas_rechazadas": 86,
+      "violaciones": 150
+    },
+    {
+      "fuente": "empleados",
+      "filas_rechazadas": 18,
+      "violaciones": 18
+    },
+    {
+      "fuente": "resenas",
+      "filas_rechazadas": 228,
+      "violaciones": 232
+    },
+    {
+      "fuente": "tracking_envios",
+      "filas_rechazadas": 9372,
+      "violaciones": 9372
+    },
+    {
+      "fuente": "ventas",
+      "filas_rechazadas": 179,
+      "violaciones": 181
+    }
+  ],
+  "historial_tracking": [
+    {
+      "version": 2,
+      "timestamp": "2026-11-24 19:38:58",
+      "operation": "MERGE",
+      "operationMetrics": {
+        "numTargetRowsCopied": "0",
+        "numTargetRowsDeleted": "0",
+        "numTargetBytesRemoved": "0",
+        "numTargetDeletionVectorsAdded": "0",
+        "numTargetRowsMatchedUpdated": "0",
+        "numTargetRowsMatchedDeleted": "0",
+        "numTargetRowsUpdated": "0",
+        "numTargetChangeFilesAdded": "0",
+        "numTargetRowsNotMatchedBySourceDeleted": "0",
+        "rewriteTimeMs": "1068",
+        "numTargetFilesAdded": "1",
+        "numTargetBytesAdded": "274406",
+        "executionTimeMs": "7098",
+        "materializeSourceTimeMs": "4472",
+        "numTargetRowsInserted": "15139",
+        "numTargetDeletionVectorsUpdated": "0",
+        "scanTimeMs": "1427",
+        "numOutputRows": "15139",
+        "numTargetDeletionVectorsRemoved": "0",
+        "numTargetRowsNotMatchedBySourceUpdated": "0",
+        "numSourceRows": "15139",
+        "numTargetFilesRemoved": "0"
+      }
+    },
+    {
+      "version": 1,
+      "timestamp": "2026-11-24 19:38:34",
+      "operation": "DLT SETUP",
+      "operationMetrics": {}
+    },
+    {
+      "version": 0,
+      "timestamp": "2026-11-24 19:38:33",
+      "operation": "CREATE TABLE",
+      "operationMetrics": {}
+    }
+  ]
+}

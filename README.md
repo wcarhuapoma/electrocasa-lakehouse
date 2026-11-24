@@ -49,6 +49,8 @@ SELECT * FROM electrocasa_dev.gold.despachos_por_courier ORDER BY courier;
 
 Para el reto, elegir en un entorno de prueba un rechazo cuyo valor correcto esté respaldado por la fuente. Localizar el original con el identificador y el archivo de cuarentena, reconstruir el objeto JSON completo con los nombres y tipos de Bronze, y registrar una revisión en `silver.correcciones`. La clave operativa es `(fuente, registro_id, revision)`. Asignar una revisión mayor que las anteriores y registrar el motivo. Ejecutar el job y comprobar que el identificador deja de figurar en la cuarentena activa, figura una sola vez en Silver y conserva las filas anteriores del historial. Volver a ejecutar y demostrar que Silver se mantiene estable. Para un registro con información sensible, conservar la corrección y su evidencia detallada dentro del workspace.
 
+El notebook `96_probar_reproceso` ejecutó las funciones del pipeline en Free Edition con una venta sintética. Aplicó la segunda revisión, pasó de un rechazo a una fila aceptada, conservó Bronze y obtuvo el mismo resultado al repetir la prueba. [Evidencia del reproceso](evidencias/reproceso.json)
+
 ## Evidencia de gobierno y entrega
 
 - **Validación y despliegue.** `databricks bundle validate --strict` pasó para `dev` y `prod` en Free Edition con la base `electrocasadb`. El despliegue de `dev` creó el job, el pipeline Medallion y el conector de Tracking.
@@ -57,15 +59,16 @@ Para el reto, elegir en un entorno de prueba un rechazo cuyo valor correcto est�
 - **Verificación de Tracking.** La consulta federada `01f1e83e-5eac-1c08-ba6a-85256232452a` devolvió 15.139 filas, 15.139 claves distintas y cero cursores nulos desde la conexión de solo lectura.
 - **Alternativa de permisos.** La lista de grupos de Free Edition mostraba solo los grupos predeterminados. Se usó `modo_usuario=true` en el run exitoso `205067055147937` para aplicar las máscaras con la identidad del dueño y dar lectura Gold al principal disponible.
 - **Verificación local.** Se comprobaron los conteos de los 14 archivos, el esquema del bundle, la sintaxis de los notebooks y los siete contratos. Las seis consultas Gold se probaron sobre datos sintéticos en DuckDB con adaptaciones de dialecto.
-- Capturar `SHOW GRANTS ON SCHEMA electrocasa_dev.silver` durante la demostración de un permiso temporal a Analistas. Otorgar `USE SCHEMA, SELECT` en el esquema, capturar los grants y revocar ambos privilegios. En el modo de usuario de Free Edition, documentar el error de los grupos y hacer la demostración con el principal disponible en el catálogo dedicado.
+- **Verificación Gold en Databricks.** El run `160270565668811` aprobó las siete comprobaciones, incluida la conciliación del neto y la deduplicación de eventos de envío. [Resultados](evidencias/verificaciones-gold.json)
+- **Prueba de permisos.** Se capturó `SHOW GRANTS ON SCHEMA electrocasa_dev.silver` antes, durante y después de otorgar temporalmente `SELECT` al principal `account users`. Se revocó el privilegio y se comprobó su ausencia. En esta demostración no se otorgó `USE SCHEMA`. La cuenta dueña pudo consultar el objeto enmascarado de Gold y ver sus valores autorizados. [Evidencia de gobierno](evidencias/gobierno.json)
 - Probar las máscaras sobre `gold.empleados_actuales` con Ingeniería y con una identidad de solo lectura. Guardar únicamente los conteos de filas visibles, enmascaradas y con salario nulo. Obtener la evidencia de auditoría y linaje desde Catalog Explorer si Free Edition deniega los grants a `system.access`. Conservar el error y el event log o historial del job.
 - Guardar las ejecuciones del bundle y del job, los resultados de Gold y la evidencia de reproceso. Comparar en cada lote los conteos con el output del notebook. Para Tracking, capturar el historial Delta y los IDs de actualización que muestran la carga inicial y la siguiente corrida sin cambios.
 
 | Corrida | Bronze de archivos esperado, acumulado | Tracking esperado | Conteos observados de Silver, Gold y rechazos |
 |---|---:|---:|---|
-| Lote 1 | 18.064 | 15.139 | Pendientes de ejecución |
-| Lote 2 | 34.262 | 15.139, sin filas nuevas | Pendientes de ejecución |
-| Lote 3 | 40.930 | 15.139 | Pendientes de ejecución |
-| Repetición sin archivos nuevos | 40.930 | 15.139 | Deben mantenerse los conteos de negocio |
+| [Lote 1](evidencias/lote-01.json) | 18.064 | 15.139 insertados, versión Delta 2 | 23.215 filas de negocio Silver, 3.602 Gold y 9.925 registros rechazados |
+| [Lote 2](evidencias/lote-02.json) | 34.262 | 15.139 acumulados, cero nuevos, versión Delta 2 | 41.983 filas de negocio Silver, 5.866 Gold y 4.909 registros rechazados |
+| [Lote 3](evidencias/lote-03.json) | 40.930 | 15.139 acumulados, versión Delta 2 | 51.830 filas de negocio Silver, 7.347 Gold y 1.561 registros rechazados |
+| [Repetición sin archivos nuevos](evidencias/repeticion.json) | 40.930 | 15.139 acumulados, versión Delta 2 | Silver, Gold y rechazos idénticos al lote 3. Solo aumentó el historial de cuarentena por la nueva corrida. |
 
-Los conteos esperados de archivos se obtienen de los lotes documentados en `datos/README.md`. Las cifras observadas, la evidencia del despliegue y la URL de entrega se completan con el workspace Free Edition y el repositorio GitHub del examen.
+Los cuatro runs finalizaron en `SUCCESS`. [Lote 1](https://dbc-02d8efd4-96e8.cloud.databricks.com/jobs/70172595208905/runs/628637681475647?o=7474644067615801) · [Lote 2](https://dbc-02d8efd4-96e8.cloud.databricks.com/jobs/70172595208905/runs/1029534711173493?o=7474644067615801) · [Lote 3](https://dbc-02d8efd4-96e8.cloud.databricks.com/jobs/70172595208905/runs/978773737751305?o=7474644067615801) · [Repetición](https://dbc-02d8efd4-96e8.cloud.databricks.com/jobs/70172595208905/runs/160108478881999?o=7474644067615801)

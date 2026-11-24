@@ -62,5 +62,5 @@ transformaciones_silver:
 problemas_conocidos:
 - problema: Estados inconsistentes y cambios de estado reprocesados
   ejemplo: En camino / EN_CAMINO
-  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  filas_afectadas: 2.648 eventos usaron alguna variante de En camino en Bronze.
   tratamiento: Estandarizar estados y deduplicar por envío, estado y fecha del cambio.

@@ -1,0 +1,9 @@
+{
+  "caso": "venta sintética con monto negativo",
+  "rechazos_antes": 1,
+  "rechazos_despues": 0,
+  "filas_aceptadas": 1,
+  "revision_aplicada": 2,
+  "bronze_original_conservado": true,
+  "repeticion_idempotente": true
+}

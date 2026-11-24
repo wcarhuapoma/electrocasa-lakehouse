@@ -57,5 +57,5 @@ transformaciones_silver:
 problemas_conocidos:
 - problema: Reembolso fuera del rango de la venta original
   ejemplo: Monto negativo o mayor que la venta
-  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  filas_afectadas: 249 filas en cuarentena por reembolso inválido o falta del monto de la venta.
   tratamiento: Validar después del join con Ventas y reevaluar referencias por lote.

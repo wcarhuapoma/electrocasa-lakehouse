@@ -75,5 +75,5 @@ transformaciones_silver:
 problemas_conocidos:
 - problema: Formatos de monto heterogéneos y reingestas
   ejemplo: 1.234,50
-  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  filas_afectadas: 244 montos con coma y 240 repeticiones de ID en Bronze.
   tratamiento: Normalizar decimales y deduplicar por venta_id.

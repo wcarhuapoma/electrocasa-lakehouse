@@ -53,5 +53,5 @@ transformaciones_silver:
 problemas_conocidos:
 - problema: Precio con símbolo monetario y productos descontinuados
   ejemplo: S/ 1,299.90
-  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  filas_afectadas: 90 precios con prefijo S/ y 60 apariciones con activo=false en Bronze.
   tratamiento: Conservar el último snapshot válido por producto, incluido activo=false.

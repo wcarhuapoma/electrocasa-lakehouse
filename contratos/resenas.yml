@@ -55,5 +55,5 @@ transformaciones_silver:
 problemas_conocidos:
 - problema: Calificaciones fuera de escala y metadatos heterogéneos
   ejemplo: Calificación 0 o 6
-  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  filas_afectadas: 103 calificaciones fuera de escala o nulas en Bronze.
   tratamiento: Validar en Silver y conservar metadata como texto JSON.

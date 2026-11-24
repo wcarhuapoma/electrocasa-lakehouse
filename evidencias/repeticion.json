@@ -1,0 +1,205 @@
+{
+  "run_id": "160108478881999",
+  "conteos": [
+    {
+      "capa": "bronze",
+      "tabla": "catalogo",
+      "filas": 4705
+    },
+    {
+      "capa": "bronze",
+      "tabla": "devoluciones",
+      "filas": 4217
+    },
+    {
+      "capa": "bronze",
+      "tabla": "empleados",
+      "filas": 4448
+    },
+    {
+      "capa": "bronze",
+      "tabla": "resenas",
+      "filas": 9280
+    },
+    {
+      "capa": "bronze",
+      "tabla": "sucursales",
+      "filas": 40
+    },
+    {
+      "capa": "bronze",
+      "tabla": "tracking_envios",
+      "filas": 15139
+    },
+    {
+      "capa": "bronze",
+      "tabla": "ventas",
+      "filas": 18240
+    },
+    {
+      "capa": "gold",
+      "tabla": "despachos_por_courier",
+      "filas": 4
+    },
+    {
+      "capa": "gold",
+      "tabla": "dotacion_mensual",
+      "filas": 320
+    },
+    {
+      "capa": "gold",
+      "tabla": "empleados_actuales",
+      "filas": 1138
+    },
+    {
+      "capa": "gold",
+      "tabla": "ranking_productos",
+      "filas": 20
+    },
+    {
+      "capa": "gold",
+      "tabla": "resenas_negativas",
+      "filas": 40
+    },
+    {
+      "capa": "gold",
+      "tabla": "ventas_netas",
+      "filas": 320
+    },
+    {
+      "capa": "gold",
+      "tabla": "ventas_por_vendedor",
+      "filas": 5505
+    },
+    {
+      "capa": "silver",
+      "tabla": "advertencias",
+      "filas": 177
+    },
+    {
+      "capa": "silver",
+      "tabla": "catalogo",
+      "filas": 2393
+    },
+    {
+      "capa": "silver",
+      "tabla": "correcciones",
+      "filas": 0
+    },
+    {
+      "capa": "silver",
+      "tabla": "cuarentena",
+      "filas": 1750
+    },
+    {
+      "capa": "silver",
+      "tabla": "cuarentena_historial",
+      "filas": 18550
+    },
+    {
+      "capa": "silver",
+      "tabla": "devoluciones",
+      "filas": 3908
+    },
+    {
+      "capa": "silver",
+      "tabla": "empleados",
+      "filas": 4410
+    },
+    {
+      "capa": "silver",
+      "tabla": "resenas",
+      "filas": 8956
+    },
+    {
+      "capa": "silver",
+      "tabla": "sucursales",
+      "filas": 40
+    },
+    {
+      "capa": "silver",
+      "tabla": "tracking_envios",
+      "filas": 14635
+    },
+    {
+      "capa": "silver",
+      "tabla": "ventas",
+      "filas": 17488
+    }
+  ],
+  "rechazos": [
+    {
+      "fuente": "catalogo",
+      "filas_rechazadas": 93,
+      "violaciones": 93
+    },
+    {
+      "fuente": "devoluciones",
+      "filas_rechazadas": 249,
+      "violaciones": 432
+    },
+    {
+      "fuente": "empleados",
+      "filas_rechazadas": 38,
+      "violaciones": 38
+    },
+    {
+      "fuente": "resenas",
+      "filas_rechazadas": 245,
+      "violaciones": 245
+    },
+    {
+      "fuente": "tracking_envios",
+      "filas_rechazadas": 416,
+      "violaciones": 416
+    },
+    {
+      "fuente": "ventas",
+      "filas_rechazadas": 520,
+      "violaciones": 526
+    }
+  ],
+  "historial_tracking": [
+    {
+      "version": 2,
+      "timestamp": "2026-11-24 19:38:58",
+      "operation": "MERGE",
+      "operationMetrics": {
+        "numTargetRowsCopied": "0",
+        "numTargetRowsDeleted": "0",
+        "numTargetBytesRemoved": "0",
+        "numTargetDeletionVectorsAdded": "0",
+        "numTargetRowsMatchedUpdated": "0",
+        "numTargetRowsMatchedDeleted": "0",
+        "numTargetRowsUpdated": "0",
+        "numTargetChangeFilesAdded": "0",
+        "numTargetRowsNotMatchedBySourceDeleted": "0",
+        "rewriteTimeMs": "1068",
+        "numTargetFilesAdded": "1",
+        "numTargetBytesAdded": "274406",
+        "executionTimeMs": "7098",
+        "materializeSourceTimeMs": "4472",
+        "numTargetRowsInserted": "15139",
+        "numTargetDeletionVectorsUpdated": "0",
+        "scanTimeMs": "1427",
+        "numOutputRows": "15139",
+        "numTargetDeletionVectorsRemoved": "0",
+        "numTargetRowsNotMatchedBySourceUpdated": "0",
+        "numSourceRows": "15139",
+        "numTargetFilesRemoved": "0"
+      }
+    },
+    {
+      "version": 1,
+      "timestamp": "2026-11-24 19:38:34",
+      "operation": "DLT SETUP",
+      "operationMetrics": {}
+    },
+    {
+      "version": 0,
+      "timestamp": "2026-11-24 19:38:33",
+      "operation": "CREATE TABLE",
+      "operationMetrics": {}
+    }
+  ]
+}

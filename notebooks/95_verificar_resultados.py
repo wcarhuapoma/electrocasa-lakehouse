@@ -1,4 +1,6 @@
 # Databricks notebook source
+import json
+
 # Contrasta las métricas publicadas con comprobaciones independientes.
 dbutils.widgets.text("catalog", "electrocasa_dev")
 catalog = dbutils.widgets.get("catalog")
@@ -49,3 +51,6 @@ result = [(name, bool(spark.sql(query).first()[0])) for name, query in checks.it
 display(spark.createDataFrame(result, "verificacion string, aprobada boolean"))
 if failures := [name for name, passed in result if not passed]:
     raise RuntimeError(f"Verificaciones fallidas: {failures}")
+
+# Devuelve resultados agregados para adjuntar la prueba al repositorio.
+dbutils.notebook.exit(json.dumps(dict(result), ensure_ascii=False))

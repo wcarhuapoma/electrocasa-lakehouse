@@ -38,5 +38,5 @@ transformaciones_silver:
 problemas_conocidos:
 - problema: Variantes de mayúsculas en ciudad
   ejemplo: Ciudad con casing inconsistente
-  filas_afectadas: Medir por regla y lote en la ejecución de Bronze y Silver.
+  filas_afectadas: 2 nombres cambiaron al aplicar initcap.
   tratamiento: Estandarizar con initcap.
